@@ -89,8 +89,8 @@ A production-ready, **decoupled REST API** built for a university hackathon that
 
 ### Prerequisites
 
+- Node.js (v16+)
 - Python 3.12 or higher
-- `pip` (comes with Python)
 - Git (optional, for cloning)
 
 ---
@@ -103,96 +103,71 @@ cd solution-1
 
 ---
 
-### 2. Create and activate virtual environment
+### 2. Configure Backend & Database
+
+The backend uses a zero-config SQLite database. First, set up the Python environment:
 
 ```bash
-# Create
-python -m venv venv
+# Create virtual environment
+python -m venv backend/venv
 
 # Activate (Windows PowerShell)
-.\venv\Scripts\Activate.ps1
+.\backend\venv\Scripts\Activate.ps1
+# OR Activate (macOS / Linux)
+source backend/venv/bin/activate
 
-# Activate (Windows CMD)
-venv\Scripts\activate.bat
-
-# Activate (macOS / Linux)
-source venv/bin/activate
-```
-
----
-
-### 3. Install dependencies
-
-```bash
+# Install dependencies
 pip install -r requirements.txt
-```
 
----
-
-### 4. Configure environment variables
-
-```bash
-# Copy the template
-cp backend/.env.example backend/.env
-```
-
-Edit `backend/.env`:
-
-```dotenv
-# Generate a new key with:
-# python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
-SECRET_KEY=your-generated-secret-key-here
-
-DEBUG=True
-ALLOWED_HOSTS=127.0.0.1,localhost
-CORS_ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
-```
-
-> ⚠️ **Never commit `.env` to version control.** It is already in `.gitignore`.
-
----
-
-### 5. Run database migrations
-
-```bash
+# Run migrations to initialize the database
 python backend/manage.py migrate
 ```
 
-Expected output:
+Configure your environment variables:
+```bash
+cp backend/.env.example backend/.env
 ```
-Operations to perform:
-  Apply all migrations: admin, auth, contenttypes, core, sessions, token_blacklist, users
-Running migrations:
-  Applying users.0001_initial... OK
-  Applying core.0001_initial... OK
-  ...
-```
+Ensure `CORS_ALLOWED_ORIGINS` in your `.env` includes `http://localhost:5173` and `http://127.0.0.1:5173`.
 
----
-
-### 6. Create a superuser (admin panel access)
-
+Optionally, create a superuser for the Django admin panel:
 ```bash
 python backend/manage.py createsuperuser
 ```
 
-Follow the prompts. Then log in at `http://127.0.0.1:8000/admin/`.
+---
 
-> **Tip for hackathon demo:** After creating the superuser, open the admin panel
-> and create a Lecturer user and a Student user with the correct role flags set,
-> then use their credentials with the JWT login endpoint.
+### 3. Configure Frontend
+
+Install the necessary NPM packages for the Vue 3 + Vite application.
+
+```bash
+cd frontend
+npm install
+cd ..
+```
 
 ---
 
-### 7. Start the development server
+### 4. 🚀 Ignition — 1-Click Startup
 
-```bash
-python backend/manage.py runserver
+We have provided convenient "ignition" scripts to launch the entire stack (both the Django API and the Vue dev server) concurrently.
+
+**For Windows:**
+Double-click `start.bat` or run:
+```cmd
+start.bat
 ```
 
-Server will be available at: **`http://127.0.0.1:8000/`**
+**For macOS / Linux:**
+```bash
+chmod +x start.sh
+./start.sh
+```
 
-The DRF Browsable API root is at: **`http://127.0.0.1:8000/api/`**
+**Accessing the System:**
+- **Frontend App:** [http://localhost:5173](http://localhost:5173)
+- **Django Backend / API:** [http://127.0.0.1:8000](http://127.0.0.1:8000)
+- **Django Admin Panel:** [http://127.0.0.1:8000/admin/](http://127.0.0.1:8000/admin/)
 
 ---
 
